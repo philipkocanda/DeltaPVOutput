@@ -2,7 +2,7 @@
 #PVoutput.org
 
 import time, subprocess,serial
-from deltaInv import DeltaInverter
+from delta30EUG4TRInv import DeltaInverter
 from time import localtime, strftime
 
 #PVOutput.org API Values - UPDATE THESE TO YOURS!
@@ -13,10 +13,10 @@ from time import localtime, strftime
 #are empty.
 #an empty string means don't individually update this inverter on pvoutput.org - just do the totals
 
-SYSTEMIDS=["",""]
+SYSTEMIDS=["123455","123455"]
 #System ID of the total/avg values.
-TOTALSYSTEMID=""
-APIKEY=""
+TOTALSYSTEMID="123456"
+APIKEY="123bc123d42314db1c43b1423d1b2341bc243"
 
 if __name__ == '__main__':
 
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     for index in range(len(SYSTEMIDS)):
 	    inv = DeltaInverter(index+1) #init Inverter 1
 	    #Get the Daily Energy thus far
-	    cmd = inv.getCmdStringFor('Day Wh')
+	    cmd = inv.getCmdStringFor('Energy Day')
 	    connection.write(cmd)
 	    response = connection.read(100)
 	    #if no response the inverter is asleep
@@ -55,15 +55,15 @@ if __name__ == '__main__':
 	        t_power = 'v2={0}'.format(value)
 
 		#AC Voltage
-	        cmd = inv.getCmdStringFor('AC Volts')
+	        cmd = inv.getCmdStringFor('AC Voltage')
 	        connection.write(cmd)
 	        response = connection.read(100)
 	        value = inv.getValueFromResponse(response)
-		avgACVolts+=float(value)
+		avgACVolts+=int(value)
 	        t_volts = 'v6={0}'.format(value)
 
 		#Temp - this appears to be onboard somewhere not the heatsink
-	        cmd = inv.getCmdStringFor('DC Temp')
+	        cmd = inv.getCmdStringFor('Internal Ambient Temperature')
 	        connection.write(cmd)
 	        response = connection.read(100)
 	        value = inv.getValueFromResponse(response)
@@ -80,7 +80,7 @@ if __name__ == '__main__':
 		            '-d', t_volts,
 		            '-d', t_temp,
 		            '-H', 'X-Pvoutput-Apikey: ' + APIKEY, 
-		            '-H', 'X-Pvoutput-SystemId: ' + SYSTEMID[index], 
+		            '-H', 'X-Pvoutput-SystemId: ' + SYSTEMIDS[index],
 		            'http://pvoutput.org/service/r1/addstatus.jsp']
 		        ret = subprocess.call (cmd)
 	    else:

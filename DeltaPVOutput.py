@@ -4,10 +4,7 @@
 import time, subprocess,serial
 from delta30EUG4TRInv import DeltaInverter
 from time import localtime, strftime
-
-#PVOutput.org API Values - UPDATE THESE TO YOURS!
-SYSTEMID="17458"
-APIKEY="123bc123d42314db1c43b1423d1b2341bc243"
+from config import Configuration
 
 if __name__ == '__main__':
 
@@ -62,8 +59,8 @@ if __name__ == '__main__':
             '-d', t_power, 
             '-d', t_volts,
             '-d', t_temp,
-            '-H', 'X-Pvoutput-Apikey: ' + APIKEY, 
-            '-H', 'X-Pvoutput-SystemId: ' + SYSTEMID, 
+            '-H', 'X-Pvoutput-Apikey: ' + Configuration.APIKEY,
+            '-H', 'X-Pvoutput-SystemId: ' + Configuration.SYSTEMIDS[0],
             'http://pvoutput.org/service/r1/addstatus.jsp']
         ret = subprocess.call (cmd)
     else:

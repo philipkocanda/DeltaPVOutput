@@ -30,7 +30,7 @@ if __name__ == '__main__':
     validInv =0
 
     for index in range(len(Configuration.SYSTEMIDS)):
-	    inv = DeltaInverter(index+1) #init Inverter
+	    inv = DeltaInverter(Configuration.RS485IDS[index]) #init Inverter
 	    #Get the Daily Energy thus far
 	    cmd = inv.getCmdStringFor('Energy Day')
 	    connection.write(cmd)

@@ -4,6 +4,7 @@
 import time, subprocess,serial
 from delta30EUG4TRInv import DeltaInverter
 from time import localtime, strftime
+from config import Configuration
 
 if __name__ == '__main__':
 
@@ -14,7 +15,7 @@ if __name__ == '__main__':
     t_date = 'd={0}'.format(strftime('%Y%m%d'))
     t_time = 't={0}'.format(strftime('%H:%M'))
 
-    inv1 = DeltaInverter(1) #init Inverter 1
+    inv1 = DeltaInverter(Configuration.RS485IDS[0]) #init first inverter
 
     for code,cmd in sorted(inv1.cmds.iteritems()):
         commandName = cmd[0]

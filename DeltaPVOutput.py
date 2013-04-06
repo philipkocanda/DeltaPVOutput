@@ -15,7 +15,7 @@ if __name__ == '__main__':
     t_date = 'd={0}'.format(strftime('%Y%m%d'))
     t_time = 't={0}'.format(strftime('%H:%M'))
 
-    inv1 = DeltaInverter(1) #init Inverter 1
+    inv1 = DeltaInverter(Configuration.RS485IDS[0]) #init first inverter
     #Get the Daily Energy thus far
     cmd = inv1.getCmdStringFor('Energy Day')
     connection.write(cmd)

@@ -1,19 +1,62 @@
 DeltaPVOutput
 =============
+A series of python scripts to use RS485 Serial from Delta G4 Inverter to PVOutput.org, and upload data to pvoutput.org
 
-A series of python scripts to use RS485 Serial from Delta Inverter to PVOutput.org
+Hardware setup
+==============
+USB-RS485 modem
+---------------
+You need a RS485-USB modem like this one, which costs from about USD 2.50 and upwards.
+This one works fine http://www.ebay.com/itm/USB-to-RS485-485-Converter-Adapter-ch340T-chip-Support-32-64-XP-Win7-Vista-/360615203160?pt=LH_DefaultDomain_0&hash=item53f6575158
 
-DeltaInverter Module has two major functions:
-Generation of Command Strings to be sent over RS485 to the inverter
+Cable
+-----
+Then you need a cable to connect your inverter with the USB-modem. Any normal network cable should work - if long distances, make sure your cable is a twisted pair (i.e. the normal round network cables)
+This cable works:
+![alt text](https://github.com/rsltrifork/DeltaPVOutput/raw/master/Cabel.jpg"Cable")
+However, for long distances, you should use a round network cable, and instead of connecting wire 6 and 7, you should connect wire 7 and 8 (which are a twisted pair). On my inverter both 6,7 and 7,8 work.
 
-Parsing of response strings received from the inverter, this is done in two forms:
-1) Obtain the raw values using getValueFromResponse 
-2) Obtain a formatted response using getFormattedResponse which will contain the instruction/value/unit tuple
+Connecting multiple inverter
+----------------------------
+Just insert an normal, unmodified network cable connecting the inverters RS485 ports. No need for RS485 termination.
 
-A list of instructions known is also in the module, no doubt there's more but these were the ones I gleaned from Sorin/4lex/Raiki @ whirlpool.net.au
+Machine
+-------
+I use a raspberry PI to run the program connected to my home network with a USB wifi dongle. It was amazingly easy to setup and came with drivers for both WIFI dongle and the USB-RS485 out of the box, when using the default "Wheezy" image.
 
-DeltaPVOutput - simply queries the inverter and posts the result to PVOutput.org
+Inverter setup
+==============
+This is only relevant if you have more than one inverter. Set a unique RS485 ID for each inverter. Preferably start with number 1 and count upwards.
 
-You will need to insert your systemID and API Key naturally
+Software setup
+==============
+Edit config file
+-------------
+Edit config.py, and insert your RS485 ID(s), so they match what is setup in your converters.
+Edit config.py systemID(s) and API Key so they maych your account settings at pvoutput.org. Signing up is free.
+Check connection
+-------------
+Check that you can connect by running:
+python power-now.py
 
-Run via crontab to poll periodically
+[code]
+python power-now.py
+1: AC Power: 1203 W
+2: AC Power: 1573 W
+Total: AC Power: 2776 W
+
+1: DC Power: 1250 W
+2: DC Power: 1612 W
+Total: DC Power: 2862 W
+[/code]
+
+Crontab
+-------
+You want to run MultipleDeltaPVOutput.py every 5 minutes to send data to pvoutput.org
+type:
+[code]crontab -e[/code]
+
+Enter this line:
+[code]*/5 * * * * /home/pi/DeltaPVOutput/run.sh > /tmp/log.txt 2>&1[/code]
+
+Only thing left to do is lean back, and see the nice graphs on pvoutput.org while cursing the clouds!

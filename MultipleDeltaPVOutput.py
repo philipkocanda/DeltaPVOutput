@@ -4,6 +4,7 @@
 import time, subprocess,serial
 from delta30EUG4TRInv import DeltaInverter
 from time import localtime, strftime
+from config import Configuration
 
 #PVOutput.org API Values - UPDATE THESE TO YOURS!
 
@@ -12,11 +13,6 @@ from time import localtime, strftime
 #the numebr of systemIDs must still be the same as the number of inverter- even if they
 #are empty.
 #an empty string means don't individually update this inverter on pvoutput.org - just do the totals
-
-SYSTEMIDS=["17458","17766"]
-#System ID of the total/avg values.
-TOTALSYSTEMID="123456"
-APIKEY="a14990baf0290b91eb31a867b6e34531e2a3566b"
 
 if __name__ == '__main__':
 
@@ -79,8 +75,8 @@ if __name__ == '__main__':
 		            '-d', t_power, 
 		            '-d', t_volts,
 		            '-d', t_temp,
-		            '-H', 'X-Pvoutput-Apikey: ' + APIKEY, 
-		            '-H', 'X-Pvoutput-SystemId: ' + SYSTEMIDS[index],
+		            '-H', 'X-Pvoutput-Apikey: ' + Configuration.APIKEY,
+		            '-H', 'X-Pvoutput-SystemId: ' + Configuration.SYSTEMIDS[index],
 		            'http://pvoutput.org/service/r1/addstatus.jsp']
 		        ret = subprocess.call (cmd)
 	    else:
@@ -105,8 +101,8 @@ if __name__ == '__main__':
 	            '-d', t_power, 
 	            '-d', t_volts,
 	            '-d', t_temp,
-	            '-H', 'X-Pvoutput-Apikey: ' + APIKEY, 
-	            '-H', 'X-Pvoutput-SystemId: ' + TOTALSYSTEMID, 
+	            '-H', 'X-Pvoutput-Apikey: ' + Configuration.APIKEY,
+	            '-H', 'X-Pvoutput-SystemId: ' + Configuration.TOTALSYSTEMID,
 	            'http://pvoutput.org/service/r1/addstatus.jsp']
         ret = subprocess.call (cmd)
     else:

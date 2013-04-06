@@ -29,8 +29,8 @@ if __name__ == '__main__':
     avgTempDC=0
     validInv =0
 
-    for index in range(len(SYSTEMIDS)):
-	    inv = DeltaInverter(index+1) #init Inverter 1
+    for index in range(len(Configuration.SYSTEMIDS)):
+	    inv = DeltaInverter(index+1) #init Inverter
 	    #Get the Daily Energy thus far
 	    cmd = inv.getCmdStringFor('Energy Day')
 	    connection.write(cmd)
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 	        value = inv.getValueFromResponse(response)
 		avgTempDC+=int(value)
 	        t_temp = 'v5={0}'.format(value)
-		if not SYSTEMIDS[index]=="":
+		if not Configuration.SYSTEMIDS[index]=="":
 
 			#Send it all off to PVOutput.org
 		        cmd = ['/usr/bin/curl',

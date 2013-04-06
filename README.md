@@ -39,16 +39,14 @@ Check connection
 Check that you can connect by running:
 python power-now.py
 
-`
-python power-now.py
+`python power-now.py
 1: AC Power: 1203 W
 2: AC Power: 1573 W
 Total: AC Power: 2776 W
 
 1: DC Power: 1250 W
 2: DC Power: 1612 W
-Total: DC Power: 2862 W
-`
+Total: DC Power: 2862 W`
 
 Crontab
 -------

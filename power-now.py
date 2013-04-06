@@ -5,10 +5,6 @@ import time, subprocess,serial
 from delta30EUG4TRInv import DeltaInverter
 from time import localtime, strftime
 
-#PVOutput.org API Values - UPDATE THESE TO YOURS!
-SYSTEMID="123455"
-APIKEY="a14990baf0290b91eb31a867b6e34531e2a3566b"
-
 if __name__ == '__main__':
 
     #Edit your serial connection as required!!

@@ -1,0 +1,14 @@
+class Configuration:
+
+    #PVOutput.org API Values - UPDATE THESE TO YOURS.
+    # After updating values, rename this file to config.py
+
+
+    # If you have one inverter, then enter like this: SYSTEMIDS=["123456"]
+    SYSTEMIDS=["123456","123457"]
+
+    #System ID of the total/avg values. You only need this if you have multiple inverters.
+    TOTALSYSTEMID="123456"
+
+    #Your secret PVOutput.org API key
+    APIKEY="12312ab23412bc234d1234cb1324c367368765ac"

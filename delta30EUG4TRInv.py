@@ -1,6 +1,7 @@
 import crc,struct,sys
 from crc import CRC16
 from struct import *
+from config import Configuration
 class DeltaInverter:
 
     inverterNum=0;

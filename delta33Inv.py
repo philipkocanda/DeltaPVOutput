@@ -8,13 +8,21 @@ class DeltaInverter:
     	#Known Commands
 	                 ##StrValue, Format, divisor, units
     
-    cmds = {'\x10\x01': ('DC Cur1',0,10.0,'A'),
+    cmds = {
+            '\x00\x09': ('Serial',11,0,''),
+            '\x10\x07': ('Date Code',11,0,''),
+                cmd = inv1.getCmdStringFor(com)
+                connection.write(cmd)
+                response = connection.read(1000)
+                value = inv1.getValueFromResponse(response)
+                u1 = '{0}={1}'.format(com, value)
+
+            '\x10\x01': ('DC Cur1',0,10.0,'A'),
             '\x10\x02': ('DC Volts1',0,1,'V'),
             '\x10\x03': ('DC Pwr1',0,1,'W'),
             '\x10\x04': ('DC Cur2',0,10.0,'A'),
             '\x10\x05': ('DC Volts2',0,1,'V'),
             '\x10\x06': ('DC Pwr2',0,1,'W'),
-            '\x10\x07': ('AC Current',0,10.0,'A'),
             '\x10\x08': ('AC Volts',0,1,'V'),            
             '\x10\x09': ('AC Power',0,1,'W'),
             '\x11\x07': ('AC I Avg',0,10.0,'A'),
@@ -22,9 +30,14 @@ class DeltaInverter:
             '\x11\x09': ('AC P Avg',0,1,'W'),
             '\x13\x03': ('Day Wh',0,1,'Wh'),
             '\x13\x04': ('Uptime',0,1,'min'),
-            '\x00\x00': ('Inverter Type',9,0,''),
-            '\x00\x01': ('Serial',1,0,''),
-            '\x00\x08': ('Part',1,0,''),
+            '\x00\x01': ('01',1,0,''),
+            '\x00\x02': ('02',0,1,''),
+            '\x00\x03': ('03',0,1,''),
+            '\x00\x04': ('04',11,0,''),
+            '\x00\x05': ('05',11,0,''),
+            '\x00\x06': ('06',0,1,''),
+            '\x00\x07': ('07',11,0,''),
+            '\x00\x08': ('08',11,0,''),
             '\x00\x40': ('FW Version',10,0,''),                        
             '\x20\x05': ('AC Temp',0,1,'o'),
             '\x21\x08': ('DC Temp',0,1,'o')

@@ -8,6 +8,7 @@ USB-RS485 modem
 ---------------
 You need a RS485-USB modem like this one, which costs from about USD 2.50 and upwards.
 This one works fine http://www.ebay.com/itm/USB-to-RS485-485-Converter-Adapter-ch340T-chip-Support-32-64-XP-Win7-Vista-/360615203160?pt=LH_DefaultDomain_0&hash=item53f6575158
+Be aware it takes a couple of weeks to ship from China.
 
 Cable
 -----

@@ -13,7 +13,7 @@ Cable
 -----
 Then you need a cable to connect your inverter with the USB-modem. Any normal network cable should work - if long distances, make sure your cable is a twisted pair (i.e. the normal round network cables)
 This cable works:
-![alt text](https://github.com/rsltrifork/DeltaPVOutput/raw/master/Cabel.jpg"Cable")
+![alt text](https://github.com/rsltrifork/DeltaPVOutput/raw/master/Cabel.jpg)
 However, for long distances, you should use a round network cable, and instead of connecting wire 6 and 7, you should connect wire 7 and 8 (which are a twisted pair). On my inverter both 6,7 and 7,8 work.
 
 Connecting multiple inverter
@@ -39,7 +39,7 @@ Check connection
 Check that you can connect by running:
 python power-now.py
 
-[code]
+`
 python power-now.py
 1: AC Power: 1203 W
 2: AC Power: 1573 W
@@ -48,15 +48,15 @@ Total: AC Power: 2776 W
 1: DC Power: 1250 W
 2: DC Power: 1612 W
 Total: DC Power: 2862 W
-[/code]
+`
 
 Crontab
 -------
 You want to run MultipleDeltaPVOutput.py every 5 minutes to send data to pvoutput.org
 type:
-[code]crontab -e[/code]
+`crontab -e`
 
 Enter this line:
-[code]*/5 * * * * /home/pi/DeltaPVOutput/run.sh > /tmp/log.txt 2>&1[/code]
+`*/5 * * * * /home/pi/DeltaPVOutput/run.sh > /tmp/log.txt 2>&1`
 
 Only thing left to do is lean back, and see the nice graphs on pvoutput.org while cursing the clouds!

@@ -58,4 +58,15 @@ type:
 Enter this line:
 `*/5 * * * * /home/pi/DeltaPVOutput/run.sh > /tmp/log.txt 2>&1`
 
+Where `/home/pi/DeltaPVOutput/run.sh` is the path you have installed the scripts in.
+
 Only thing left to do is lean back, and see the nice graphs on pvoutput.org while cursing the clouds!
+
+Disclaimer
+==========
+The authors of this software and guide take no responsibility of how it works. It's purely for educational purposes.
+The code may or may not work with different inverter models/firmware versions than the one it was created for.
+Different versions of the Solivia inverter support different commands. A command from one inverter version may be
+interpreted as something completely different in another version, potentially updating the inverter configuration,
+leading to misconfiguration or possibly worse.
+Using this software is your responsibility entirely.

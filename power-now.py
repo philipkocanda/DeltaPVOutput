@@ -25,7 +25,7 @@ if __name__ == '__main__':
     print ("1: DC Power: " + str(dcPower1) + " W")
 
     dcVoltage1 = inv1.call('DC Voltage')
-    print ("1: DC Voltage: " + str(dcVoltage1) + " W\n")
+    print ("1: DC Voltage: " + str(dcVoltage1) + " V\n")
 
     acPower2 = inv2.call('AC Power')
     print ("2: AC Power: " + str(acPower2) + " W")
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     print ("2: DC Power: " + str(dcPower2) + " W")
 
     dcVoltage2 = inv2.call('DC Voltage')
-    print ("2: DC Voltage: " + str(dcVoltage2) + " W\n")
+    print ("2: DC Voltage: " + str(dcVoltage2) + " V\n")
 
     connection.close()
 

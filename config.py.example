@@ -3,6 +3,11 @@ class Configuration:
     #PVOutput.org API Values - UPDATE THESE TO YOURS.
     # After updating values, rename this file to config.py
 
+    # These are the RS485 ids set in the inverters. The default value is 1.
+    # If you have more than one inverter, you must assign each inverter a
+    # unique RS485 from 1 upwards using the buttons on the inverter.
+    RS485IDS=[1, 2]
+
 
     # If you have one inverter, then enter like this: SYSTEMIDS=["123456"]
     SYSTEMIDS=["123456","123457"]

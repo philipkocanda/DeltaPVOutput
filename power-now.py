@@ -2,53 +2,54 @@
 #PVoutput.org
 
 import time, subprocess,serial
-from delta30EUG4TRInv import DeltaInverter
+from delta30EUG4TRInv import Delta30EU_G4_TR_Inverter
 from time import localtime, strftime
 from config import Configuration
+from mysql import MysqlInserter
 
 if __name__ == '__main__':
 
-    #Edit your serial connection as required!!
-    connection = serial.Serial('/dev/ttyUSB0',19200,timeout=0.5);
+    connection = serial.Serial('/dev/ttyUSB0',Configuration.serialBaud, timeout=Configuration.serialTimeoutSecs)
     localtime = time.localtime(time.time())   
  
     t_date = 'd={0}'.format(strftime('%Y%m%d'))
     t_time = 't={0}'.format(strftime('%H:%M'))
 
-    inv1 = DeltaInverter(Configuration.RS485IDS[0])
-    commandName = 'AC Power'
-    command = inv1.getCmdStringFor(commandName)
-    connection.write(command)
-    response = connection.read(100)
-    p1 = inv1.getValueFromResponse(response)
-    print ("1: " + commandName + ": " + str(p1) + " W")
+    inv1 = Delta30EU_G4_TR_Inverter(Configuration.RS485IDS[0], connection)
+    inv2 = Delta30EU_G4_TR_Inverter(Configuration.RS485IDS[1], connection)
 
-    inv1 = DeltaInverter(Configuration.RS485IDS[1])
-    commandName = 'AC Power'
-    command = inv1.getCmdStringFor(commandName)
-    connection.write(command)
-    response = connection.read(100)
-    p2 = inv1.getValueFromResponse(response)
-    print ("2: " + commandName + ": " + str(p2) + " W")
+    acPower1 = inv1.call('AC Power')
+    print ("1: AC Power: " + str(acPower1) + " W")
 
-    print ("Total: " + commandName + ": " + str(int(p1) + int(p2)) + " W\n")
+    dcPower1 = inv1.call('DC Power')
+    print ("1: DC Power: " + str(dcPower1) + " W")
 
-    inv1 = DeltaInverter(Configuration.RS485IDS[0])
-    commandName = 'DC Power'
-    command = inv1.getCmdStringFor(commandName)
-    connection.write(command)
-    response = connection.read(100)
-    p1 = inv1.getValueFromResponse(response)
-    print ("1: " + commandName + ": " + str(p1) + " W")
+    dcVoltage1 = inv1.call('DC Voltage')
+    print ("1: DC Voltage: " + str(dcVoltage1) + " W\n")
 
-    inv1 = DeltaInverter(Configuration.RS485IDS[1])
-    commandName = 'DC Power'
-    command = inv1.getCmdStringFor(commandName)
-    connection.write(command)
-    response = connection.read(100)
-    p2 = inv1.getValueFromResponse(response)
-    print ("2: " + commandName + ": " + str(p2) + " W")
+    acPower2 = inv2.call('AC Power')
+    print ("2: AC Power: " + str(acPower2) + " W")
 
-    print ("Total: " + commandName + ": " + str(int(p1) + int(p2)) + " W")
+    dcPower2 = inv2.call('DC Power')
+    print ("2: DC Power: " + str(dcPower2) + " W")
+
+    dcVoltage2 = inv2.call('DC Voltage')
+    print ("2: DC Voltage: " + str(dcVoltage2) + " W\n")
 
     connection.close()
+
+    try:
+        print ("Total: AC Power: " + str(int(acPower1) + int(acPower2)) + " W")
+    except:
+        pass
+    try:
+        print ("Total DC Power: " + str(int(dcPower1) + int(dcPower2)) + " W\n")
+    except:
+        pass
+
+    try:
+        m = MysqlInserter()
+        m.insert(1, dcVoltage1, dcPower1, acPower1)
+        m.insert(2, dcVoltage2, dcPower2, acPower2)
+    except:
+        print "Error inserting into mysql"

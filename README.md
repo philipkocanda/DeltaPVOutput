@@ -17,17 +17,15 @@ This cable works:
 ![alt text](https://github.com/rsltrifork/DeltaPVOutput/raw/master/Cabel.jpg)
 However, for long distances, you should use a round network cable, and instead of connecting wire 6 and 7, you should connect wire 7 and 8 (which are a twisted pair). On my inverter both 6,7 and 7,8 work.
 
-Connecting multiple inverter
+Connecting Multiple Inverters
 ----------------------------
 Just insert an normal, unmodified network cable connecting the inverters RS485 ports. No need for RS485 termination.
+Set a unique RS485 ID for each inverter by using the buttons on the inverter. Preferably start with 1 and count upwards.
 
 Machine
 -------
 I use a raspberry PI to run the program connected to my home network with a USB wifi dongle. It was amazingly easy to setup and came with drivers for both WIFI dongle and the USB-RS485 out of the box, when using the default "Wheezy" image.
 
-Inverter setup
-==============
-This is only relevant if you have more than one inverter. Set a unique RS485 ID for each inverter. Preferably start with number 1 and count upwards.
 
 Software setup
 ==============
@@ -51,7 +49,7 @@ Total: DC Power: 2862 W`
 
 Crontab
 -------
-You want to run MultipleDeltaPVOutput.py every 5 minutes to send data to pvoutput.org
+You want to run DeltaPVOutput.py every 5 minutes to send data to pvoutput.org
 type:
 `crontab -e`
 

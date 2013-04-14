@@ -12,3 +12,17 @@ class Configuration:
 
     #Your secret PVOutput.org API key
     APIKEY="12312ab23412bc234d1234cb1324c367368765ac"
+
+    # If you use mysql, specify username, password and schema here. Remember to create schema and table first in mysql with sql/createSchema.sql
+    mysqlUser = ''
+    mysqlPw = ''
+    mysqlHost = 'localhost'
+    mysqlDb = 'deltapv'
+
+
+    # Only change settings below this line, if you know what you are doing.
+
+    # Must match the inverter(s) rs485 baud rate
+    serialBaud=19200
+    # Above 0.05s seems to be sane
+    serialTimeoutSecs=0.1

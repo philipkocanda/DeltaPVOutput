@@ -1,6 +1,7 @@
-import struct,sys,time
+import struct,sys,time,serial
 from crc import CRC16
 from struct import *
+from config import Configuration
 class Inverter:
 
     inverterNum=0
@@ -34,10 +35,14 @@ class Inverter:
 
         retryCount = 0
         succes = False
-        while retryCount < 3 and not succes:
+        while retryCount < 10 and not succes:
             if retryCount > 0:
                 print "Retry count: " + str(retryCount)
                 time.sleep(0.5 * retryCount)
+                if retryCount > 5:
+                    # reinit connection
+                    print "Reinitialize connection"
+                    self.connection = serial.Serial('/dev/ttyUSB0',Configuration.serialBaud, timeout=Configuration.serialTimeoutSecs)
             try:
                 self.connection.write(self.__buildCmd(commandObj[0]))
                 response = self.connection.read(commandObj[5])

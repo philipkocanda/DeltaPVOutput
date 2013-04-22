@@ -1,7 +1,6 @@
-import struct,sys,time,serial
+import struct,sys,time
 from crc import CRC16
 from struct import *
-from config import Configuration
 class Inverter:
 
     inverterNum=0
@@ -35,13 +34,13 @@ class Inverter:
 
         retryCount = 0
         succes = False
-        while retryCount < 10 and not succes:
+        while retryCount < 7 and not succes:
             if retryCount > 0:
-                print "Retry count: " + str(retryCount)
-                time.sleep(0.5 * retryCount)
-                if retryCount > 5:
+                time.sleep(0.2 * retryCount)
+                if retryCount > 3:
                     # reinit connection
-                    print "Reinitialize connection"
+                    print "Retry count: " + str(retryCount) + " Reinitialize connection"
+                    self.connection.close()
                     self.connection = serial.Serial('/dev/ttyUSB0',Configuration.serialBaud, timeout=Configuration.serialTimeoutSecs)
             try:
                 self.connection.write(self.__buildCmd(commandObj[0]))
@@ -57,7 +56,7 @@ class Inverter:
     #checks for a valid STX, ETX and CRC
     def isValidResponse(self,cmd):
         if len(cmd) == 0:
-            print "Empty reply!"
+            # print "Empty reply!"
             return False
         if ord(cmd[1])== 0x15:
             return "N/A"

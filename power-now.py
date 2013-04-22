@@ -25,7 +25,18 @@ if __name__ == '__main__':
     print ("1: DC Power: " + str(dcPower1) + " W")
 
     dcVoltage1 = inv1.call('DC Voltage')
-    print ("1: DC Voltage: " + str(dcVoltage1) + " V\n")
+    print ("1: DC Voltage: " + str(dcVoltage1) + " V")
+
+    dcCurrent1 = inv1.call('DC Current')
+    print ("1: DC Current: " + str(dcCurrent1) + " A")
+
+    try:
+        print "1: Efficiency: %.2f%%" % (100.0*int(acPower1)/int(dcPower1))
+    except:
+        pass
+
+    energyDay1 = inv1.call('Energy Day')
+    print ("1: Energy Day: " + str(energyDay1) + " wh\n")
 
     acPower2 = inv2.call('AC Power')
     print ("2: AC Power: " + str(acPower2) + " W")
@@ -34,7 +45,18 @@ if __name__ == '__main__':
     print ("2: DC Power: " + str(dcPower2) + " W")
 
     dcVoltage2 = inv2.call('DC Voltage')
-    print ("2: DC Voltage: " + str(dcVoltage2) + " V\n")
+    print ("2: DC Voltage: " + str(dcVoltage2) + " V")
+
+    dcCurrent2 = inv2.call('DC Current')
+    print ("2: DC Current: " + str(dcCurrent2) + " A")
+
+    try:
+        print "2: Efficiency: %.2f%%" % (100.0*int(acPower2)/int(dcPower2))
+    except:
+        pass
+
+    energyDay2 = inv2.call('Energy Day')
+    print ("2: Energy Day: " + str(energyDay2) + " Wh\n")
 
     connection.close()
 
@@ -43,9 +65,14 @@ if __name__ == '__main__':
     except:
         pass
     try:
-        print ("Total DC Power: " + str(int(dcPower1) + int(dcPower2)) + " W\n")
+        print ("Total DC Power: " + str(int(dcPower1) + int(dcPower2)) + " W")
     except:
         pass
+    try:
+        print ("Total Energy Day: " + str(int(energyDay1) + int(energyDay2)) + " Wh\n")
+    except:
+        pass
+        
 
     try:
         m = MysqlInserter()

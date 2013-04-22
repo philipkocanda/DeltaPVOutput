@@ -78,7 +78,7 @@ if __name__ == '__main__':
         except:
             print "No or failed response from inverter %d - shutdown? No Data sent to PVOutput.org"% (index+1)
 
-    if validInv !=0:
+    if validInv >1 and totalACPower >0:
         print "%d awake Inverters" % validInv
         avgTempDC=avgTempDC/validInv
 

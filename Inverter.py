@@ -1,6 +1,7 @@
-import struct,sys,time
+import struct,sys,time,serial
 from crc import CRC16
 from struct import *
+from config import Configuration
 class Inverter:
 
     inverterNum=0
@@ -46,6 +47,8 @@ class Inverter:
                 self.connection.write(self.__buildCmd(commandObj[0]))
                 response = self.connection.read(commandObj[5])
                 response_check_result = self.isValidResponse(response)
+                if response_check_result == "N/A":
+                    return "N/A"
                 if response_check_result != True:
                     raise Exception("Invalid Response: " + str(response) + " response_check_result: " + str(response_check_result))
                 return self.__unpackData(response, commandObj)

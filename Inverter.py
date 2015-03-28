@@ -1,4 +1,4 @@
-import struct,sys,time,serial
+import struct,sys,time,serial,binascii
 from crc import CRC16
 from struct import *
 from config import Configuration
@@ -35,14 +35,13 @@ class Inverter:
 
         retryCount = 0
         succes = False
-        while retryCount < 7 and not succes:
+        while retryCount < 20 and not succes:
             if retryCount > 0:
-                time.sleep(0.2 * retryCount)
-                if retryCount > 3:
-                    # reinit connection
-                    print "Retry count: " + str(retryCount) + " Reinitialize connection"
-                    self.connection.close()
-                    self.connection = serial.Serial('/dev/ttyUSB0',Configuration.serialBaud, timeout=Configuration.serialTimeoutSecs)
+                time.sleep(0.05 * retryCount)
+                # reinit connection
+                print "Retry count: " + str(retryCount) + " Reinitialize connection"
+                self.connection.close()
+                self.connection = serial.Serial('/dev/ttyUSB0',Configuration.serialBaud, timeout=Configuration.serialTimeoutSecs, parity=serial.PARITY_EVEN, rtscts=1, xonxoff=1)
             try:
                 self.connection.write(self.__buildCmd(commandObj[0]))
                 response = self.connection.read(commandObj[5])
@@ -50,7 +49,7 @@ class Inverter:
                 if response_check_result == "N/A":
                     return "N/A"
                 if response_check_result != True:
-                    raise Exception("Invalid Response: " + str(response) + " response_check_result: " + str(response_check_result))
+                    raise Exception("Invalid Response: " + str(response_check_result))
                 return self.__unpackData(response, commandObj)
             except Exception as e:
                 retryCount += 1
@@ -59,19 +58,22 @@ class Inverter:
     #checks for a valid STX, ETX and CRC
     def isValidResponse(self,cmd):
         if len(cmd) == 0:
-            # print "Empty reply!"
-            return False
+            return "Empty reply."
+#        if len(cmd) != cmd[5]:
+#            return "Len should be " + str(cmd[5]) + " was: " + str(len(cmd)) 
         if ord(cmd[1])== 0x15:
             return "N/A"
-        elif ord(cmd[1])<> 0x06 or ord(cmd[0])!=0x02 or ord(cmd[len(cmd)-1])!=0x03:
-            return False
+        elif cmd[:2] != binascii.unhexlify("0206"):
+            return "First 2 bytes should be 0x0206. Was: 0x" + binascii.hexlify(cmd[:2])
+        elif ord(cmd[-1:])!=0x03:
+            return "Last byte should be 0x03. Was: 0x" + binascii.hexlify(cmd[-1:])
         cmdcontents = cmd[1:-3]
         crc = self.crcCalc.calcString(cmdcontents)
         lo = crc & (0xff)
         high = (crc>>8) & 0xff
         crcByte = len(cmd)-3
         if ord(cmd[crcByte])!=lo or ord(cmd[crcByte+1])!=high:   
-            return False
+            return "CRC failed"
         return True
 
     #Returns a raw value from a response

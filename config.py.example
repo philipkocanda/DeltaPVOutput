@@ -6,11 +6,11 @@ class Configuration:
     # These are the RS485 ids set in the inverters. The default value is 1.
     # If you have more than one inverter, you must assign each inverter a
     # unique RS485 from 1 upwards using the buttons on the inverter.
-    RS485IDS=[1, 2]
+    RS485IDS=[1]
 
 
     # If you have one inverter, then enter like this: SYSTEMIDS=["123456"]
-    SYSTEMIDS=["123456","123457"]
+    SYSTEMIDS=["123456"]
 
     #System ID of the total/avg values. You only need this if you have multiple inverters.
     TOTALSYSTEMID="123456"
@@ -24,6 +24,20 @@ class Configuration:
     mysqlHost = 'localhost'
     mysqlDb = 'deltapv'
 
+    # Domoticz Server
+    dzServer='localhost'
+    dzUsername = 'admin'
+    dzPassword = 'your great password here'
+    dzPasscode = ''
+
+    # Domoticz Devices: [Description] [Unit] [Virtual Sensor Type]
+    dzEnergyMeterDeviceId = 229 # Total delivered energy (Wh) (Electric Instant+Counter)
+    dzDcVoltageDeviceId = 230 # Current DC Voltage (V) (Voltage)
+    dzDcCurrentDeviceId = 231 # Current DC Current (A) (Ampere 1-phase)
+    dzAcVoltageDeviceId = 232 # Current AC Voltage (V) (Voltage)
+    dzAcCurrentDeviceId = 233 # Current AC Current (A) (Ampere 1-phase)
+    dzAcFrequencyDeviceId = 234 # Current AC Frequency (Hz) (Custom Sensor)
+    dzInverterTemperatureDeviceId = 235 # Inverter Temperature (C) (Temperature)
 
     # Only change settings below this line, if you know what you are doing.
 

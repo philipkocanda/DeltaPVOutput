@@ -23,7 +23,7 @@ class Domoticz:
         self.dzRequest(
             "http://" + Configuration.dzServer +
             "/json.htm?type=command&param=udevice&idx=%d" % idx +
-            ("&nvalue=0&svalue=%d" % value) +
+            ("&nvalue=0&svalue=%f" % value) +
             "&passcode=" + Configuration.dzPasscode
         )
 

@@ -8,7 +8,6 @@ class Delta25Inverter(Inverter):
 
          # Source: https://forums.whirlpool.net.au/archive/1901079
     cmds = [
-            ['\x00\x00','Model number',10,0,'', 12], # format unsure
             ['\x00\x09','Serial',-1,0,'', 27],
             ['\x00\x08','Inverter Type',-1,0,'', 20],
             ['\x00\x0a','Revision',-1,0,'', 11],
@@ -22,11 +21,10 @@ class Delta25Inverter(Inverter):
             ['\x00\x21','Time',12,0,'', 12],
             ['\x00\x00','Grid',1,0,'', 29],
 
-            ['\x13\x03','Energy Today',3,1,'Wh', 17],
-            ['\x13\x04','Runtime Today',12,0,'', 12], # format unsure
+            ['\x13\x03','Energy Today',0,1,'Wh', 17],
+            #['\x13\x04','Runtime Today',0,0,'Minutes', 13],
 
-            ['\x17\x03','Energy Total',3,1,'Wh', 17],
-            ['\x17\x04','Runtime Total',12,0,'', 12], # format unsure
+            #['\x14\x03','Energy Total',1,1,'Wh', 17],
 
             ['\x10\x01','DC Current 1',0,10.0,'A', 11],
             ['\x10\x02','DC Voltage 1',0,1,'V', 11],
@@ -54,8 +52,7 @@ class Delta25Inverter(Inverter):
             ['\x11\x09','AC Power Avg',0,1,'W', 11],
             ['\x11\x0a','AC Frequency Avg',0,100.0,'Hz', 11],
 
-            ['\x20\x05','AC Temperature',0,1,'C', 11],
-            ['\x21\x08','DC Temperature',0,1,'C', 11]
+            ['\x20\x05','Temperature',0,1,'C', 11],
 
             ]
 

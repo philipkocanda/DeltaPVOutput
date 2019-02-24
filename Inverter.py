@@ -35,7 +35,7 @@ class Inverter:
 
         retryCount = 0
         succes = False
-        while retryCount < 20 and not succes:
+        while retryCount < 1 and not succes:
             if retryCount > 0:
                 time.sleep(0.05 * retryCount)
                 # reinit connection

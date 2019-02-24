@@ -5,7 +5,7 @@ import time, subprocess,serial
 from delta25Inv import Delta25Inverter
 from time import localtime, strftime
 from config import Configuration
-from mysql import MysqlInserter
+# from mysql import MysqlInserter
 from domoticz import Domoticz
 
 #PVOutput.org API Values - UPDATE THESE TO YOURS!
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         inv = Delta25Inverter(Configuration.RS485IDS[index], connection) #init Inverter
         dz = Domoticz()
         #Get the Daily Energy thus far
-        try:
+        if True:
             energyDay = int(inv.call('Energy Today'))
             validInv+=1
             totalWh+= energyDay
@@ -42,9 +42,11 @@ if __name__ == '__main__':
             t_energy = 'v1={0}'.format(energyDay)
 
             #instanteous power AC-side
-            acPower = inv.call('AC Power 1')
+            acPower = inv.call('AC Power')
             totalACPower+= int(acPower)
             t_power = 'v2={0}'.format(acPower)
+
+            print(acPower)
 
             #instanteous power DC-side
             dcPower = inv.call('DC Power 1')
@@ -55,65 +57,25 @@ if __name__ == '__main__':
             t_volts = 'v6={0}'.format(dcVoltage)
 
             #Temp - this appears to be onboard somewhere not the heatsink
-            temp = inv.call('AC Temperature')
+            temp = inv.call('Temperature')
             avgTempDC += int(temp)
             t_temp = 'v5={0}'.format(temp)
 
-            energyTotal = int(inv.call('Energy Total'))
-            dcCurrent = int(inv.call('DC Current 1'))
-            acCurrent = int(inv.call('AC Current'))
+            #energyTotal = int(inv.call('Energy Total'))
+            dcCurrent = float(inv.call('DC Current 1'))
+            acCurrent = float(inv.call('AC Current'))
             acVoltage = int(inv.call('AC Voltage'))
-            acFrequency = int(inv.call('AC Frequency'))
+            acFrequency = float(inv.call('AC Frequency'))
 
-            dz.updateElectricityMeter(Configuration.dzEnergyMeterDeviceId, int(acPower), energyTotal)
+            print('Updating Domoticz...')
+            print(int(acPower))
+
+            dz.updateElectricityMeter(Configuration.dzEnergyMeterDeviceId, int(acPower))
             dz.updateDeviceValue(Configuration.dzDcCurrentDeviceId, int(dcCurrent))
             dz.updateDeviceValue(Configuration.dzDcVoltageDeviceId, int(dcVoltage))
             dz.updateDeviceValue(Configuration.dzAcVoltageDeviceId, int(acVoltage))
             dz.updateDeviceValue(Configuration.dzAcCurrentDeviceId, int(acCurrent))
             dz.updateDeviceValue(Configuration.dzAcFrequencyDeviceId, float(acFrequency))
             dz.updateDeviceValue(Configuration.dzInverterTemperatureDeviceId, int(temp))
-
-            if not Configuration.SYSTEMIDS[index]=="":
-                #Send it all off to PVOutput.org
-                cmd = ['/usr/bin/curl',
-                    '-d', t_date,
-                    '-d', t_time,
-                    '-d', t_energy,
-                    '-d', t_power,
-                    '-d', t_volts,
-                    '-d', t_temp,
-                    '-H', 'X-Pvoutput-Apikey: ' + Configuration.APIKEY,
-                    '-H', 'X-Pvoutput-SystemId: ' + Configuration.SYSTEMIDS[index],
-                    'http://pvoutput.org/service/r1/addstatus.jsp']
-                ret = subprocess.call (cmd)
-            try:
-                m = MysqlInserter()
-                m.insert(Configuration.RS485IDS[index], dcVoltage, dcPower, acPower)
-            except:
-                print "Error inserting into mysql"
-        except:
-            print "No or failed response from inverter %d - shutdown? No Data sent to PVOutput.org"% (index+1)
-
-    if validInv >1 and totalACPower >0:
-        print "%d awake Inverters" % validInv
-        avgTempDC=avgTempDC/validInv
-
-        t_energy = 'v1={0}'.format(totalWh)
-        t_power = 'v2={0}'.format(totalACPower)
-        t_temp = 'v5={0}'.format(avgTempDC)
-
-        #Send it all off to PVOutput.org
-        cmd = ['/usr/bin/curl',
-               '-d', t_date,
-                '-d', t_time,
-                '-d', t_energy,
-                '-d', t_power,
-                '-d', t_temp,
-                '-H', 'X-Pvoutput-Apikey: ' + Configuration.APIKEY,
-                '-H', 'X-Pvoutput-SystemId: ' + Configuration.TOTALSYSTEMID,
-                'http://pvoutput.org/service/r1/addstatus.jsp']
-        ret = subprocess.call (cmd)
-    else:
-       print "No response from any inverter - shutdown? No Data sent to PVOutput.org"
 
     connection.close()

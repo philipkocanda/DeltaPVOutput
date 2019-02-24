@@ -2,7 +2,7 @@
 #PVoutput.org
 
 import sys,time, subprocess,serial
-from delta30EUG4TRInv import Delta30EU_G4_TR_Inverter
+from delta25Inv import Delta25Inverter
 from time import localtime, strftime
 from config import Configuration
 
@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     for index in range(len(Configuration.SYSTEMIDS)):
         print "-------- Inverter with RS485 id: " + str(Configuration.RS485IDS[index]) + "--------"
-        inv = Delta30EU_G4_TR_Inverter(Configuration.RS485IDS[index], connection) #init Inverter
+        inv = Delta25Inverter(Configuration.RS485IDS[index], connection) #init Inverter
         # Loop through all known commands
         for command in inv.cmds:
             code, commandName, format, divisor, unit, responseSize = command

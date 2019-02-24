@@ -71,10 +71,10 @@ if __name__ == '__main__':
             print(int(acPower))
 
             dz.updateElectricityMeter(Configuration.dzEnergyMeterDeviceId, int(acPower))
-            dz.updateDeviceValue(Configuration.dzDcCurrentDeviceId, int(dcCurrent))
+            dz.updateDeviceValue(Configuration.dzDcCurrentDeviceId, float(dcCurrent))
             dz.updateDeviceValue(Configuration.dzDcVoltageDeviceId, int(dcVoltage))
             dz.updateDeviceValue(Configuration.dzAcVoltageDeviceId, int(acVoltage))
-            dz.updateDeviceValue(Configuration.dzAcCurrentDeviceId, int(acCurrent))
+            dz.updateDeviceValue(Configuration.dzAcCurrentDeviceId, float(acCurrent))
             dz.updateDeviceValue(Configuration.dzAcFrequencyDeviceId, float(acFrequency))
             dz.updateDeviceValue(Configuration.dzInverterTemperatureDeviceId, int(temp))
 
